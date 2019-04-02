@@ -16,74 +16,59 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import safeyourself.socialsecurityononetouch.Common.Common;
+public class Main3Activity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
-Button btnlogin,btnsignup;
-EditText email,password;
+    Button sup;
+    EditText email,password;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        email = (EditText)findViewById(R.id.em);
-        password = (EditText)findViewById(R.id.pass);
+        setContentView(R.layout.activity_main3);
+        sup = (Button)findViewById(R.id.sup);
+        email = (EditText)findViewById(R.id.email);
+        password =(EditText)findViewById(R.id.password);
         mAuth = FirebaseAuth.getInstance();
-        btnlogin=(Button)findViewById(R.id.btnlogin);
-        btnlogin.setOnClickListener(new View.OnClickListener()
-                {
+        sup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             signin();
-            }
-
-
-
-        });
-
-
-        btnsignup=(Button)findViewById(R.id.btnsignup);
-        btnsignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,Main3Activity.class);
-                startActivity(i);
+                signup();
             }
         });
+
+
+
+
 
     }
-    public void signin(){
-        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+    public void signup() {
+        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            //   Log.d(TAG, "signInWithEmail:success");
-                            String s = email.getText().toString();
-                            Common.setCurrentUser(s);
+                          //  Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            // Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            String s = "Sign up Failed" + task.getException();
-                            Toast.makeText(MainActivity.this, s,
+                           // Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(Main3Activity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //  updateUI();
+                            updateUI(null);
                         }
 
                         // ...
                     }
                 });
-
     }
     public void updateUI(FirebaseUser user){
 
 
 
-        Intent i = new Intent(MainActivity.this,Main2Activity.class);
-                startActivity(i);
+        Intent i = new Intent(Main3Activity.this,MainActivity.class);
+        startActivity(i);
 
     }
 }
